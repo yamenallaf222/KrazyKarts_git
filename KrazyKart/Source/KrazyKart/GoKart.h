@@ -38,9 +38,7 @@ private:
 
 
 
-
-	UPROPERTY(EditAnywhere)
-	float ForceMultiplier = 5.f;
+	
 	
 	// Max Force Applied to the car measured in (N)
 	UPROPERTY(EditAnywhere)
