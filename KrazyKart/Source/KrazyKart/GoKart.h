@@ -6,6 +6,45 @@
 #include "GameFramework/Pawn.h"
 #include "GoKart.generated.h"
 
+USTRUCT()
+struct FGoKartMove
+{
+	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY()
+	float Throttle;
+	
+	UPROPERTY()
+	float SteeringThrow;
+
+	UPROPERTY()
+	float DeltaTime;
+
+	UPROPERTY()
+	float Time;
+
+};
+
+USTRUCT()
+struct FGoKartState
+{
+	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY()
+	FTransform Transform;
+	
+
+	UPROPERTY()
+	FVector Velocity;
+
+
+	UPROPERTY()
+	FGoKartMove LastMove;
+};
+
+
+
+
 UCLASS()
 class KRAZYKART_API AGoKart : public APawn
 {
@@ -31,7 +70,6 @@ private:
 
 
 
-	FVector Velocity;
 
 	FVector GetAirResistance();
 
@@ -46,32 +84,29 @@ private:
 
 	//mass of the car in kg 
 	UPROPERTY(EditAnywhere)
-		float Mass = 1000.f;
+	float Mass = 1000.f;
 
 	//Higher means more drag ** this measure is unitless though the formula used for air resistance is not physics acurate and in fact the air resistance unit is ((Kg/m)/s^2) or (N) **
 	UPROPERTY(EditAnywhere)
-		float DragCoefficient = 16;
+	float DragCoefficient = 16;
 
 	//Higher means more Roll Resistance ** this measure is unitless though the formula used for air resistance is not physics acurate and in fact the air resistance unit is ((Kg/m)/s^2) or (N) **
 	UPROPERTY(EditAnywhere)
-		float RRCoefficient = 0.015f;
+	float RRCoefficient = 0.015f;
 
 	// Max Force Applied to the car measured in (N)
 	UPROPERTY(EditAnywhere)
-		float MaxDrivingForce = 10000.f;
+	float MaxDrivingForce = 10000.f;
 
 
 	//Car Cicling Radius in meters
 	UPROPERTY(EditAnywhere)
-		float MinTurningRadius = 10.f;
+	float MinTurningRadius = 10.f;
 
 
 
 	UFUNCTION(Server, Reliable, WithValidation)
-		void Server_MoveForward(float Value);
-
-	UFUNCTION(Server, Reliable, WithValidation)
-		void Server_MoveRight(float Value);
+	void Server_SendMove(FGoKartMove Move);
 
 	void Local_MoveForward(float Value);
 
@@ -81,10 +116,22 @@ private:
 	FString GetTextRole(ENetRole);
 
 
+	FVector Velocity;
 
+
+	UPROPERTY(ReplicatedUsing = OnRep_ServerState)
+	FGoKartState  ServerState;	
+	
+	
+
+
+	UFUNCTION()
+	void OnRep_ServerState();	
+	
+	UPROPERTY(Replicated)
 	float Throttle;
 
-
+	UPROPERTY(Replicated)
 	float SteeringThrow;
 
 };
