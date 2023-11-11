@@ -15,8 +15,8 @@ which is then sent to the server.
 
 
 the images below demonstrate the infrequent updates on the other players cars as we can see the collision rectangle of the car is ahead of the car actual body as we wait to have two points to interpolate between 
-![Uploading Screenshot 2023-11-11 011244.png…]()
 
+![Screenshot 2023-11-11 011244](https://github.com/yamenallaf222/KrazyKarts_git/assets/128222208/0ccc7f23-2bd4-4ab4-9d3d-ca0c67eb2953)
 
 Here is a youtube video demonstrating the interpolation and replication
 https://youtu.be/E1nSRAOYew0?si=3UtdzuiO2e01HbSp
